@@ -1,5 +1,12 @@
+/*
+* 1.对哪个（些）元素绑定监听？
+* 2.绑定什么监听？
+* 3.对哪个（些）进行DOM修改？
+* */
+
 $(function(){
     showhide();
+    hoverSubMenu();
 
     /*
     * 1.鼠标移入显示，移出隐藏
@@ -17,4 +24,16 @@ $(function(){
             $('#'+id).hide();
         })
     }
-})
+
+    /*
+    * 2.鼠标移动切换二级当行菜单的切换显示和隐藏
+    * */
+    function hoverSubMenu(){
+        $('#category_items>div').hover(function(){
+            $(this).children(':last').show();
+        }, function(){
+            $(this).children(':last').hide();
+        });
+    }
+
+});
