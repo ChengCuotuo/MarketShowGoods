@@ -8,6 +8,33 @@ $(function(){
     showhide();
     hoverSubMenu();
     search();
+    share();
+
+    /*
+    *  4.点击显示或者隐藏更多的分享图标
+    * */
+    function share(){
+        var isOpen = false; //标识当前的状态，初始为关闭
+        $('#shareMore').click(function() {
+            var $shareMore = $('#shareMore');
+            var $parent = $shareMore.parent(); //父标签
+            var $as = $shareMore.prevAll('a:lt(2)');
+            var $b = $shareMore.children();
+
+            if (isOpen){ //去关闭
+                $parent.css('width', '155');
+                $as.hide();
+                $b.removeClass('backword');
+                isOpen = false;
+            } else { //去打开
+                $parent.css('width', '200');
+                $as.show();
+                $b.removeClass('backword');
+                isOpen = true;
+            }
+
+        })
+    }
 
     /*
      * 3.输入搜索关键字，列表显示匹配的结果
