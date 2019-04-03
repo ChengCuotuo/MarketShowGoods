@@ -15,6 +15,101 @@ $(function(){
     clickProductTabs();
     moveMiniImg ();
     hoverMiniImg ();
+    bigImg ();
+
+    /*
+    * 11.放大镜，当鼠标在中图上移动时，显示对应大图的镀金部分区域
+    * */
+    function bigImg () {
+        var $mediumImg = $('#mediumImg');
+        var $mask = $('#mask'); //小黄快遮罩
+        var $maskTop = $('#maskTop');
+        var $largeImgContainer = $('#largeImgContainer');
+        var $loading = $('#loading');
+        var $largeImg = $('#largeImg');
+        var maskWidth = $mask.width();
+        var maskHeight = $mask.height();
+        var maskTopWidth = $maskTop.width();
+        var maskTopHeight = $maskTop.height();
+
+        $maskTop.hover(function(){
+            //显示
+            $mask.show();
+            //动态加载对应的大图
+            var src = $mediumImg.attr('src').replace('-m.jpg', '-l.jpg');
+            $largeImg.attr('src', src);
+            $largeImgContainer.show();
+            //图片加载完成的时间监听
+            $largeImg.on('load', function(){
+                //得到大图的尺寸
+                var largeWidth = $largeImg.width();
+                var largeHeight = $largeImg.height();
+                //给大图容器设置尺寸，也就是显示最多的是大图尺寸的四分之一
+                $largeImgContainer.css({
+                    width : largeWidth / 2,
+                    height : largeHeight / 2
+                });
+                //显示大图
+                $largeImg.show();
+                //隐藏加载进度条
+                $loading.hide();
+                //console.log($largeImg.width(), $largeImg.height());
+                //绑定鼠标移动 mousemove监听
+                $maskTop.mousemove(function(event){  //需要获取 event 的坐标
+                    /*
+                    * 1.移动小黄快
+                    * 2.移动大图
+                    * */
+                    /*
+                    * 1.移动小黄快
+                    * */
+                    //计算小黄快的 left 和 top 值
+                    var left = 0;
+                    var top = 0;
+                    //事件坐标
+                    var eventLeft = event.offsetX;
+                    var eventTop = event.offsetY;
+                    left = eventLeft - maskWidth/2;
+                    top = eventTop - maskHeight/2;
+
+                    //left在[0, maskTopWidth-maskWidth]
+                    if (left < 0){
+                        left = 0;
+                    } else if (left > maskTopWidth - maskWidth) {
+                        left = maskTopWidth - maskWidth;
+                    }
+                    //top在[0, maskTopHeight-maskHeight]
+                    if (top < 0){
+                        top = 0;
+                    } else if (top > maskTopHeight-maskHeight) {
+                        top = maskTopHeight-maskHeight;
+                    }
+                    //给mask重新定位
+                    $mask.css({
+                        left : left,
+                        top : top
+                    });
+                    /*
+                    * 2.移动大图
+                    * */
+
+                    //得到大图的坐标
+                    left = -left * largeWidth / maskTopWidth;
+                    top = -top * largeHeight / maskTopHeight;
+                    //设置大图的坐标
+                    $largeImg.css({
+                        left : left,
+                        top : top
+                    })
+
+                });
+            });
+        }, function(){
+            $mask.hide();
+            //$largeImg.hide();
+            $largeImgContainer.hide();
+        })
+    }
 
     /*
     *10.当鼠标悬停再某个小图标上，再上方显示对应的中图
