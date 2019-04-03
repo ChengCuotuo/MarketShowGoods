@@ -14,7 +14,23 @@ $(function(){
     hoverMiniCart();
     clickProductTabs();
     moveMiniImg ();
+    hoverMiniImg ();
 
+    /*
+    *10.当鼠标悬停再某个小图标上，再上方显示对应的中图
+    * */
+    function hoverMiniImg () {
+        $('#icon_list>li').hover(function(){
+            //this.children()[0].className = 'hoveredThumb';
+            var $img = $(this).children();
+            $img.addClass('hoveredThumb');
+            //显示对应的中图
+            var src = $img.attr('src').replace('.jpg', '-m.jpg');
+            $('#mediumImg').attr('src', src);
+        }, function(){
+            $(this).children().removeClass('hoveredThumb');
+        })
+    }
 
     /*
     * 9.点击向右/左，移动当前展示商品的小图片
