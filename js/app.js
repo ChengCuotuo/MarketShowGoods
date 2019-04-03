@@ -11,6 +11,20 @@ $(function(){
     share();
     address();
     clickTabs();
+    hoverMiniCart();
+
+    /*
+    * 7.鼠标移入移除显示迷你购物车
+    * */
+    function hoverMiniCart () {
+        $('#minicart').hover(function(){
+            this.className = 'minicart';
+            $(this).children(':last').show();
+        }, function(){
+            this.className = '';
+            $(this).children(':last').hide();
+        })
+    }
 
     /*
     *6.点击切换地址
