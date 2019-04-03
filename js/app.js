@@ -12,6 +12,89 @@ $(function(){
     address();
     clickTabs();
     hoverMiniCart();
+    clickProductTabs();
+    moveMiniImg ();
+
+
+    /*
+    * 9.点击向右/左，移动当前展示商品的小图片
+    * */
+    function moveMiniImg () {
+        var $as = $('#preview>h1>a');
+        var $backward = $as.first();
+        var $forward = $as.last();
+        var $Ul = $('#icon_list');
+        var SHOW_COUNT = 5;
+        var imgCount = $Ul.children('li').length;
+        var moveCount = 0;//移动的次数(向右为正, 向左为负)
+        var liWidth = $Ul.children(':first').width();
+
+        // 初始化更新
+        if(imgCount>SHOW_COUNT) {
+            // $forward[0].className = 'forward'
+            $forward.attr('class', 'forward')
+        }
+
+
+        // 给向右的按钮绑定点击监听
+        $forward.click(function () {
+            // 判断是否需要移动, 如果不需要直接结束
+            if(moveCount===imgCount-SHOW_COUNT) {
+                return
+            }
+            moveCount++;
+            //更新向左的按钮
+            $backward.attr('class', 'backward');
+            // 更新向右的按钮
+            if(moveCount===imgCount-SHOW_COUNT) {
+                $forward.attr('class', 'forward_disabled')
+            }
+            // 移动ul
+            $Ul.css({
+                left: -moveCount * liWidth
+            })
+        });
+
+        // 给向左的按钮绑定点击监听
+        $backward.click(function () {
+            // 判断是否需要移动, 如果不需要直接结束
+            if(moveCount===0) {
+                return
+            }
+            moveCount--;
+            //更新向右的按钮
+            $forward.attr('class', 'forward');
+            // 更新向左的按钮
+            if(moveCount===0) {
+                $backward.attr('class', 'backward_disabled')
+            }
+            // 移动ul
+            $Ul.css({
+                left: -moveCount * liWidth
+            })
+        })
+
+    }
+
+    /*
+    * 8.点击切换产品选项（商品的详情显示出来）
+    * */
+    function clickProductTabs () {
+        var $lis = $('#product_detail>ul>li');
+        var $contents = $('#product_detail>div:gt(0)');
+        $lis.click(function(){
+            $lis.removeClass('current');
+            this.className = 'current';
+            //隐藏所有的 $contents
+            $contents.hide();
+            //显示当前对应的content
+            var index = $(this).index();
+            $contents.eq(index).show();
+            //$contents[index].style.display='block';
+            //get(index)获取的是一个 DOM 元素，eq(index)筛选得到一个 jQuery 对象
+            //$contents.get(index).style.display='block';
+        })
+    }
 
     /*
     * 7.鼠标移入移除显示迷你购物车
@@ -54,26 +137,28 @@ $(function(){
     /*
     *  4.点击显示或者隐藏更多的分享图标
     * */
-    function share(){
-        var isOpen = false; //标识当前的状态，初始为关闭
-        $('#shareMore').click(function() {
-            var $shareMore = $('#shuuareMore');
-            var $parent = $shareMore.parent(); //父标签
-            var $as = $shareMore.prevAll('a:lt(2)');
-            var $b = $shareMore.children();
+    function share () {
+        var isOpen = false //标识当前的状态(初始为关闭)
+        var $shareMore = $('#shareMore');
+        var $parent = $shareMore.parent()
+        var $as = $shareMore.prevAll('a:lt(2)');
+        var $b = $shareMore.children();
 
-            if (isOpen){ //去关闭
-                $parent.css('width', '155');
-                $as.hide();
-                $b.removeClass('backword');
+        $shareMore.click(function () {
+
+            if(isOpen) { // 去关闭
                 isOpen = false;
-            } else { //去打开
-                $parent.css('width', '200');
-                $as.show();
-                $b.removeClass('backword');
+                $parent.css('width', 155);
+                $as.hide();
+                $b.removeClass('backword')
+            } else { // 去打开
                 isOpen = true;
+                $parent.css('width', 200);
+                $as.show();
+                $b.addClass('backword');
             }
 
+            // isOpen = !isOpen
         })
     }
 
