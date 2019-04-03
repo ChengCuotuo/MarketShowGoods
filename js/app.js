@@ -9,6 +9,33 @@ $(function(){
     hoverSubMenu();
     search();
     share();
+    address();
+    clickTabs();
+
+    /*
+    *6.点击切换地址
+    * */
+    function clickTabs(){
+        $('#store_tabs>li').click(function(){
+            $('#store_tabs>li').removeClass('hover');
+            //$('#store_tabs>li').attr('class');
+            this.className = 'hover';
+            //$(this).addClass('hover');
+        })
+    }
+
+    /*
+    * 5.鼠标移入移除切换地址的显示隐藏
+    * */
+    function address(){
+        $('#store_select').hover(function(){
+            $(this).children(':gt(0)').show();
+        }, function(){
+            $(this).children(':gt(0)').hide();
+        }).children(':last').click(function(){
+            $(this).parent().children(':gt(0)').hide();
+        })
+    }
 
     /*
     *  4.点击显示或者隐藏更多的分享图标
@@ -16,7 +43,7 @@ $(function(){
     function share(){
         var isOpen = false; //标识当前的状态，初始为关闭
         $('#shareMore').click(function() {
-            var $shareMore = $('#shareMore');
+            var $shareMore = $('#shuuareMore');
             var $parent = $shareMore.parent(); //父标签
             var $as = $shareMore.prevAll('a:lt(2)');
             var $b = $shareMore.children();
